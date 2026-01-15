@@ -30,6 +30,7 @@ Ideal para **cantones, ciudades o provincias turísticas**.
 - Filtros:
   - Hoteles
   - Gastronomía
+  - Naturaleza
   - Cultura
 - Calificaciones y comentarios
 

@@ -37,7 +37,7 @@ class _MapPageState extends ConsumerState<MapPage> {
       _MarkerClickListener(this, ref),
     );
 
-    await mapboxMap.location.updateSettings(
+    await _mapboxMap!.location.updateSettings(
       mapbox.LocationComponentSettings(
         enabled: true,
         pulsingEnabled: true,
@@ -105,10 +105,10 @@ class _MapPageState extends ConsumerState<MapPage> {
                       label: Text(category),
                       selected: isSelected,
                       onSelected: (_) {
-                        ref
-                            .read(
-                                selectedCategoryProvider.notifier)
-                            .state = category;
+                        ref.read(selectedCategoryProvider.notifier)
+                          .state = category;
+
+                        print(category);
                       },
                       backgroundColor: Colors.white,
                       selectedColor: Colors.indigoAccent,
@@ -182,8 +182,7 @@ class _MapPageState extends ConsumerState<MapPage> {
   }
 }
 
-class _MarkerClickListener
-    extends mapbox.OnPointAnnotationClickListener {
+class _MarkerClickListener extends mapbox.OnPointAnnotationClickListener {
   final _MapPageState state;
   final WidgetRef ref;
 
@@ -207,8 +206,7 @@ class _MarkerClickListener
         builder: (_) => PlaceDetailModal(place: place),
       );
     } catch (_) {
-      debugPrint(
-          "Lugar no encontrado: ${annotation.textField}");
+      debugPrint("Lugar no encontrado: ${annotation.textField}");
     }
 
     return true;
