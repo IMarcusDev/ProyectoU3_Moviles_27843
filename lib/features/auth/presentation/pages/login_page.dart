@@ -79,6 +79,8 @@ class LoginPage extends StatelessWidget {
 
                           print(email);
                           print(password);
+
+                          context.pushReplacement('/menu');
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text('Credenciales incorrectas. Revisa los campos nuevamente.'),
