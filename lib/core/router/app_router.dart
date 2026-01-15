@@ -7,7 +7,7 @@ import 'package:turismo_app/features/menu/presentation/menu_page.dart';
 import 'package:turismo_app/features/user/presentation/pages/user_page.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/menu',
+  initialLocation: '/login',
   routes: [
     // Auth
     GoRoute(

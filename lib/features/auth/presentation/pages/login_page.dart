@@ -1,100 +1,184 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:turismo_app/core/data/datasources/firebase_user_datasource.dart';
-import 'package:turismo_app/core/data/repositories/user_repository_impl.dart';
-import 'package:turismo_app/core/domain/repositories/user_repository.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
-  // final UserRepository repo = UserRepositoryImpl(FirebaseUserdataSource());
+  LoginPage({super.key});
 
   final _formKey = GlobalKey<FormState>();
-
   String email = '';
   String password = '';
 
-  LoginPage({super.key});
+  // Paleta estilo turismo
+  static const _bgColor = Color(0xFFF5F6F2);
+  static const _cardColor = Colors.white;
+  static const _primaryGreen = Color(0xFF2E7D32);
+  static const _textPrimary = Color(0xFF1C1C1C);
+  static const _textSecondary = Color(0xFF7A7A7A);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: EdgeInsetsGeometry.symmetric(vertical: 60, horizontal: 24),
-        child: Column(
-          children: [
-            Column(
-              spacing: 16,
-              children: [
-                CircleAvatar(
-                  radius: 75,
-                ),
-                Text('App Turismo', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
-              ],
-            ),
-
-            Expanded(
-              child: Form(
-                key: _formKey,
+      backgroundColor: _bgColor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            children: [
+              // Logo
+              Expanded(
+                flex: 3,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 20,
+                  spacing: 12,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    CircleAvatar(
+                      radius: 48,
+                      backgroundColor: Color(0xFFE8F5E9),
+                      child: Icon(
+                        Icons.travel_explore,
+                        size: 40,
+                        color: _primaryGreen,
+                      ),
+                    ),
+                    Text(
+                      'App Turismo',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: _textPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 32,),
+
+              // Credentials
+              Expanded(
+                flex: 5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: 'Email'),
-                      validator: (v) => v == null || v.isEmpty ? 'Requerido' : null,
-                      onSaved: (v) => email = v ?? '',
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: 'Contraseña'),
-                      obscureText: true,
-                      validator: (v) => v != null && v.length < 6 ? 'Mínimo 6' : null,
-                      onSaved: (v) => password = v ?? '',
-                    ),
-
-                    // To Register
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('¿No tienes un usuario? '),
-                        InkWell(
-                          onTap: () => context.push('/register'),
-                          child: const Text(
-                            '¡Regístrate aquí!',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
+                    Form(
+                      key: _formKey,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: _cardColor,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.04),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                        child: Column(
+                          spacing: 16,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: 'Email',
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16)),
+                                ),
+                              ),
+                              validator: (v) =>
+                                  v == null || v.isEmpty ? 'Requerido' : null,
+                              onSaved: (v) => email = v ?? '',
+                            ),
 
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: 'Contraseña',
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16)),
+                                ),
+                              ),
+                              obscureText: true,
+                              validator: (v) =>
+                                  v != null && v.length < 6 ? 'Mínimo 6' : null,
+                              onSaved: (v) => password = v ?? '',
+                            ),
 
-                          print(email);
-                          print(password);
+                            // Link registro
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  '¿No tienes un usuario? ',
+                                  style: TextStyle(color: _textSecondary),
+                                ),
+                                InkWell(
+                                  onTap: () => context.push('/register'),
+                                  child: const Text(
+                                    'Regístrate aquí',
+                                    style: TextStyle(
+                                      color: _primaryGreen,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
 
-                          context.pushReplacement('/menu');
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Credenciales incorrectas. Revisa los campos nuevamente.'),
-                            duration: Duration(seconds: 2),
-                          ));
-                        }
-                      },
-                      child: const Text('Login'),
+                            // Botón login
+                            SizedBox(
+                              width: double.infinity,
+                              // height: 52,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: _primaryGreen,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  elevation: 0,
+                                ),
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+
+                                    print(email);
+                                    print(password);
+
+                                    context.pushReplacement('/menu');
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Credenciales incorrectas. Revisa los campos nuevamente.',
+                                        ),
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: const Text(
+                                  'Iniciar sesión',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 )
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
