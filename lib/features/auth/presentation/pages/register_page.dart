@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 
 // ignore: must_be_immutable
 class RegisterPage extends StatelessWidget {
@@ -11,17 +12,11 @@ class RegisterPage extends StatelessWidget {
   String email = '';
   String password = '';
 
-  // Paleta estilo turismo (misma que Login)
-  static const _bgColor = Color(0xFFF5F6F2);
-  static const _cardColor = Colors.white;
-  static const _primaryGreen = Color(0xFF2E7D32);
-  static const _textPrimary = Color(0xFF1C1C1C);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: _bgColor,),  // Return to Login Button
-      backgroundColor: _bgColor,
+      appBar: AppBar(backgroundColor: ThemeColors.bgColor,),  // Return to Login Button
+      backgroundColor: ThemeColors.bgColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -40,7 +35,7 @@ class RegisterPage extends StatelessWidget {
                       child: Icon(
                         Icons.person_add_alt_1,
                         size: 40,
-                        color: _primaryGreen,
+                        color: ThemeColors.primaryGreen,
                       ),
                     ),
                     Text(
@@ -48,7 +43,7 @@ class RegisterPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
-                        color: _textPrimary,
+                        color: ThemeColors.textPrimary,
                       ),
                     ),
                   ],
@@ -69,7 +64,7 @@ class RegisterPage extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: _cardColor,
+                          color: ThemeColors.cardColor,
                           borderRadius: BorderRadius.circular(28),
                           boxShadow: [
                             BoxShadow(
@@ -143,7 +138,7 @@ class RegisterPage extends StatelessWidget {
                               width: double.infinity,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: _primaryGreen,
+                                  backgroundColor: ThemeColors.primaryGreen,
                                   minimumSize:
                                       const Size.fromHeight(52),
                                   shape: RoundedRectangleBorder(

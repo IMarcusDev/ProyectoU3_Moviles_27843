@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 
 // ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
@@ -9,17 +10,10 @@ class LoginPage extends StatelessWidget {
   String email = '';
   String password = '';
 
-  // Paleta estilo turismo
-  static const _bgColor = Color(0xFFF5F6F2);
-  static const _cardColor = Colors.white;
-  static const _primaryGreen = Color(0xFF2E7D32);
-  static const _textPrimary = Color(0xFF1C1C1C);
-  static const _textSecondary = Color(0xFF7A7A7A);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _bgColor,
+      backgroundColor: ThemeColors.bgColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -38,7 +32,7 @@ class LoginPage extends StatelessWidget {
                       child: Icon(
                         Icons.travel_explore,
                         size: 40,
-                        color: _primaryGreen,
+                        color: ThemeColors.primaryGreen,
                       ),
                     ),
                     Text(
@@ -46,7 +40,7 @@ class LoginPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
-                        color: _textPrimary,
+                        color: ThemeColors.textPrimary,
                       ),
                     ),
                   ],
@@ -67,7 +61,7 @@ class LoginPage extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: _cardColor,
+                          color: ThemeColors.cardColor,
                           borderRadius: BorderRadius.circular(28),
                           boxShadow: [
                             BoxShadow(
@@ -114,14 +108,14 @@ class LoginPage extends StatelessWidget {
                               children: [
                                 const Text(
                                   '¿No tienes un usuario? ',
-                                  style: TextStyle(color: _textSecondary),
+                                  style: TextStyle(color: ThemeColors.textSecondary),
                                 ),
                                 InkWell(
                                   onTap: () => context.push('/register'),
                                   child: const Text(
                                     'Regístrate aquí',
                                     style: TextStyle(
-                                      color: _primaryGreen,
+                                      color: ThemeColors.primaryGreen,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -135,7 +129,7 @@ class LoginPage extends StatelessWidget {
                               // height: 52,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: _primaryGreen,
+                                  backgroundColor: ThemeColors.primaryGreen,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18),
                                   ),
