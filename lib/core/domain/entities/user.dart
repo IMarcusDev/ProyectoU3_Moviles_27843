@@ -4,12 +4,14 @@ class User {
   final String name;
   final String surname;
   final String email;
+  final String? password;
   final Preferences vector;
 
   User({
     required this.name,
     required this.surname,
     required this.email,
+    this.password,
     required this.vector,
   });
 
@@ -18,11 +20,13 @@ class User {
     String name,
     String surname,
     String email,
+    String password,
   ) {
     return User(
       name: name,
       surname: surname,
       email: email,
+      password: password,
       vector: Preferences.empty(),
     );
   }
@@ -39,9 +43,5 @@ class User {
       email: email ?? this.email,
       vector: vector ?? this.vector,
     );
-  }
-
-  static int getEmptyId() {
-    return -1;
   }
 }

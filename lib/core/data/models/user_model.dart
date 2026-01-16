@@ -5,27 +5,16 @@ class UserModel {
   final String name;
   final String surname;
   final String email;
+  final String? password;
   final PreferencesModel vector;
 
   UserModel({
     required this.name,
     required this.surname,
     required this.email,
+    this.password,
     required this.vector,
   });
-
-  factory UserModel.create(
-    String name,
-    String surname,
-    String email,
-  ) {
-    return UserModel(
-      name: name,
-      surname: surname,
-      email: email,
-      vector: PreferencesModel.empty(),
-    );
-  }
 
   UserModel copyWith({
     String? name,
@@ -46,6 +35,7 @@ class UserModel {
       name: json['name'] as String,
       surname: json['surname'] as String,
       email: json['email'] as String,
+      password: json['password'] as String?,
       vector: PreferencesModel.fromJson(
         json['vector'] as Map<String, dynamic>,
       ),
@@ -57,6 +47,7 @@ class UserModel {
       name: u.name,
       surname: u.surname,
       email: u.email,
+      password: u.password,
       vector: PreferencesModel.fromEntity(u.vector),
     );
   }
@@ -66,6 +57,7 @@ class UserModel {
       name: name,
       surname: surname,
       email: email,
+      password: password,
       vector: vector.toEntity(),
     );
   }
@@ -75,6 +67,7 @@ class UserModel {
       'name': name,
       'surname': surname,
       'email': email,
+      'password': password,
       'vector': vector.toJson(),
     };
   }

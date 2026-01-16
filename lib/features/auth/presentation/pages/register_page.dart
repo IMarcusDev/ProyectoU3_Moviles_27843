@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:turismo_app/core/data/datasources/firebase_user_datasource.dart';
+import 'package:turismo_app/core/data/repositories/user_repository_impl.dart';
+import 'package:turismo_app/core/domain/entities/user.dart';
+import 'package:turismo_app/core/domain/repositories/user_repository.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 
 // ignore: must_be_immutable
 class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
+  final UserRepository repo = UserRepositoryImpl(FirebaseUserdataSource());
 
   final _formKey = GlobalKey<FormState>();
 
@@ -11,6 +16,8 @@ class RegisterPage extends StatelessWidget {
   String surname = '';
   String email = '';
   String password = '';
+
+  RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -146,11 +153,28 @@ class RegisterPage extends StatelessWidget {
                                   ),
                                   elevation: 0,
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
                                     _formKey.currentState!.save();
 
-                                    // lógica de registro aquí
+                                    User newUser = User.create(
+                                      name,
+                                      surname,
+                                      email,
+                                      password,
+                                    );
+
+                                    final User firebaseUser = await repo.createUser(newUser);
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text('Usuario (${firebaseUser.email}) creado con éxito'),
+                                        duration: const Duration(seconds: 2),
+                                      ),
+                                    );
+
+                                    context.pop();
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
