@@ -21,4 +21,10 @@ class UserRepositoryImpl extends UserRepository {
   Future<User> modifyUser(User u) {
     return remote.updateUser(u);
   }
+  
+  @override
+  Future<User?> loginUser(String email, String password) {
+    // Hash password
+    return remote.loginUser(email, password);
+  }
 }

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:turismo_app/core/data/datasources/firebase_user_datasource.dart';
+import 'package:turismo_app/core/data/repositories/user_repository_impl.dart';
+import 'package:turismo_app/core/domain/entities/user.dart';
+import 'package:turismo_app/core/domain/repositories/user_repository.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
+
 
 // ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
+  final UserRepository repo = UserRepositoryImpl(FirebaseUserdataSource());
+
   LoginPage({super.key});
 
   final _formKey = GlobalKey<FormState>();
@@ -135,19 +142,29 @@ class LoginPage extends StatelessWidget {
                                   ),
                                   elevation: 0,
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
                                     _formKey.currentState!.save();
 
-                                    print(email);
-                                    print(password);
+                                    User? user = await repo.loginUser(email, password);
 
-                                    context.pushReplacement('/menu');
+                                    if (user != null) {
+                                      context.pushReplacement('/menu');
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Credenciales incorrectas.',
+                                          ),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
+                                    }
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
-                                          'Credenciales incorrectas. Revisa los campos nuevamente.',
+                                          'Completa los campos nuevamente.',
                                         ),
                                         duration: Duration(seconds: 2),
                                       ),

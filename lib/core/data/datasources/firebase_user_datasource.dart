@@ -17,8 +17,7 @@ class FirebaseUserdataSource {
   }
 
   Future<User?> fetchUser(int id) async {
-    final doc =
-        await firestore.collection('users').doc(id.toString()).get();
+    final doc = await firestore.collection('users').doc(id.toString()).get();
 
     if (!doc.exists) return null;
 
@@ -27,9 +26,22 @@ class FirebaseUserdataSource {
 
   Future<User> updateUser(User user) async {
     final doc =
-        firestore.collection('users').doc(user.id.toString());
+        firestore.collection('users').doc(user.email);
 
     await doc.update(UserModel.fromEntity(user).toJson());
     return user;
+  }
+
+  Future<User?> loginUser(String email, String password) async {
+    final query = await firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .where('password', isEqualTo: password)
+        .limit(1)
+        .get();
+
+    if (query.docs.isEmpty) return null;
+
+    return UserModel.fromJson(query.docs.first.data()).toEntity();
   }
 }

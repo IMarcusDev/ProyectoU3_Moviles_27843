@@ -1,14 +1,12 @@
 import 'package:turismo_app/core/domain/entities/preferences.dart';
 
 class User {
-  final int id;
   final String name;
   final String surname;
   final String email;
   final Preferences vector;
 
   User({
-    required this.id,
     required this.name,
     required this.surname,
     required this.email,
@@ -22,7 +20,6 @@ class User {
     String email,
   ) {
     return User(
-      id: User.getEmptyId(),
       name: name,
       surname: surname,
       email: email,
@@ -37,7 +34,6 @@ class User {
     Preferences? vector
   ) {
     return User(
-      id: id,  // No id modify
       name: name ?? this.name,
       surname: surname ?? this.surname,
       email: email ?? this.email,

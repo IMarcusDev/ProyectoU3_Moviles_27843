@@ -2,14 +2,12 @@ import 'package:turismo_app/core/data/models/preferences_model.dart';
 import 'package:turismo_app/core/domain/entities/user.dart';
 
 class UserModel {
-  final int id;
   final String name;
   final String surname;
   final String email;
   final PreferencesModel vector;
 
   UserModel({
-    required this.id,
     required this.name,
     required this.surname,
     required this.email,
@@ -22,7 +20,6 @@ class UserModel {
     String email,
   ) {
     return UserModel(
-      id: User.getEmptyId(),
       name: name,
       surname: surname,
       email: email,
@@ -37,7 +34,6 @@ class UserModel {
     PreferencesModel? vector,
   }) {
     return UserModel(
-      id: id,
       name: name ?? this.name,
       surname: surname ?? this.surname,
       email: email ?? this.email,
@@ -47,7 +43,6 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'] as int,
       name: json['name'] as String,
       surname: json['surname'] as String,
       email: json['email'] as String,
@@ -59,7 +54,6 @@ class UserModel {
 
   factory UserModel.fromEntity(User u) {
     return UserModel(
-      id: u.id,
       name: u.name,
       surname: u.surname,
       email: u.email,
@@ -69,7 +63,6 @@ class UserModel {
 
   User toEntity() {
     return User(
-      id: id,
       name: name,
       surname: surname,
       email: email,
@@ -79,7 +72,6 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'name': name,
       'surname': surname,
       'email': email,
