@@ -1,10 +1,12 @@
 class Preferences {
+  final String? id;
   final double hotel;
   final double gastronomy;
   final double nature;
   final double culture;
 
   Preferences({
+    this.id,
     required this.hotel,
     required this.gastronomy,
     required this.nature,
@@ -32,5 +34,13 @@ class Preferences {
       nature: nature ?? this.nature,
       culture: culture ?? this.culture,
     );
+  }
+
+  bool isValid() {
+    return toList().reduce((a, b) => a + b) > 0;
+  }
+
+  List<double> toList() {
+    return [hotel, gastronomy, nature, culture];
   }
 }

@@ -1,4 +1,4 @@
-import '../../features/map_exploration/domain/entities/tourist_place.dart';
+import '../../../features/map_exploration/domain/entities/tourist_place.dart';
 
 class RecommendationEngine {
   List<TouristPlace> recommend({

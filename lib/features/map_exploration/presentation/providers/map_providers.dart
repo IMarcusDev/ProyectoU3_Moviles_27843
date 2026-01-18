@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:geolocator/geolocator.dart';
-import '../../../../core/logic/recommendation_engine.dart';
+import '../../../../core/utils/logic/recommendation_engine.dart';
 import '../../../../core/services/location_service.dart';
 import '../../data/repositories/tourist_repository_impl.dart';
 import '../../domain/entities/tourist_place.dart';

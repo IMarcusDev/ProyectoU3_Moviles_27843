@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:turismo_app/core/domain/entities/place.dart';
+import 'package:turismo_app/core/domain/entities/preferences.dart';
+import 'package:turismo_app/core/presentation/widgets/tourist_place_panel.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/quick_action_button.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/tourist_place_tile.dart';
@@ -75,7 +78,29 @@ class MenuPage extends StatelessWidget {
                 separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   return TouristPlaceTile(
-                    text: 'Lugar Turístico ${index + 1}'
+                    text: 'Lugar Turístico ${index + 1}',
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (_) => TouristPlacePanel(
+                          place: Place(
+                            id: '',
+                            name: 'Lugar 1',
+                            description: 'Lugar de prueba',
+                            latitude: -0.32,
+                            longitude: -78.46,
+                            vector: Preferences(
+                              culture: 0,
+                              hotel: 1,
+                              gastronomy: 0,
+                              nature: 0
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
               ),

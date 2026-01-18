@@ -163,7 +163,7 @@ class PlaceDetailModal extends ConsumerWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("¡Gracias por tu reseña!")),
                         );
-                        ref.refresh(allPlacesProvider);
+                        // ref.refresh(allPlacesProvider);
                       }
                     } catch (e) {
                       Navigator.pop(ctx);

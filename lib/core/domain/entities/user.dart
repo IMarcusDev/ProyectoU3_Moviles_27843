@@ -1,18 +1,16 @@
-import 'package:turismo_app/core/domain/entities/preferences.dart';
-
 class User {
+  final String? id;
   final String name;
   final String surname;
   final String email;
   final String? password;
-  final Preferences vector;
 
   User({
+    this.id,
     required this.name,
     required this.surname,
     required this.email,
     this.password,
-    required this.vector,
   });
 
   // New Users
@@ -27,7 +25,6 @@ class User {
       surname: surname,
       email: email,
       password: password,
-      vector: Preferences.empty(),
     );
   }
 
@@ -35,13 +32,11 @@ class User {
     String? name,
     String? surname,
     String? email,
-    Preferences? vector
   ) {
     return User(
       name: name ?? this.name,
       surname: surname ?? this.surname,
       email: email ?? this.email,
-      vector: vector ?? this.vector,
     );
   }
 }

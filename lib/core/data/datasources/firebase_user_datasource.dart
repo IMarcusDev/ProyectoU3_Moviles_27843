@@ -16,8 +16,8 @@ class FirebaseUserdataSource {
     return model.toEntity();
   }
 
-  Future<User?> fetchUser(int id) async {
-    final doc = await firestore.collection('users').doc(id.toString()).get();
+  Future<User?> fetchUser(String id) async {
+    final doc = await firestore.collection('users').doc(id).get();
 
     if (!doc.exists) return null;
 
@@ -42,6 +42,9 @@ class FirebaseUserdataSource {
 
     if (query.docs.isEmpty) return null;
 
-    return UserModel.fromJson(query.docs.first.data()).toEntity();
+    final data = query.docs.first.data();
+    data['id'] = query.docs.first.id;
+
+    return UserModel.fromJson(data).toEntity();
   }
 }

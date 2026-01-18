@@ -13,7 +13,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<User?> fetchUser(int id) {
+  Future<User?> fetchUser(String id) {
     return remote.fetchUser(id);
   }
 

@@ -3,59 +3,71 @@ import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 
 class TouristPlaceTile extends StatelessWidget {
   final String text;
+  final VoidCallback? onTap;
 
-  const TouristPlaceTile({super.key, required this.text});
+  const TouristPlaceTile({
+    super.key,
+    required this.text,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.transparent, // necesario para el ripple
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+        child: Ink(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor:
-                ThemeColors.primaryGreen.withOpacity(0.15),
-            child: Icon(
-              Icons.place_outlined,
-              color: ThemeColors.primaryGreen,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  text,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: ThemeColors.textPrimary,
-                  ),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor:
+                    ThemeColors.primaryGreen.withOpacity(0.15),
+                child: Icon(
+                  Icons.place_outlined,
+                  color: ThemeColors.primaryGreen,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Visto recientemente',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: ThemeColors.textSecondary,
-                  ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      text,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: ThemeColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Visto recientemente',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: ThemeColors.textSecondary,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              const Icon(Icons.chevron_right),
+            ],
           ),
-          const Icon(Icons.chevron_right),
-        ],
+        ),
       ),
     );
   }
