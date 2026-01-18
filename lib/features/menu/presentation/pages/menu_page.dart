@@ -3,18 +3,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:turismo_app/core/data/datasources/firebase_place_datasource.dart';
 import 'package:turismo_app/core/data/repositories/place_repository_impl.dart';
-import 'package:turismo_app/core/domain/entities/place.dart';
 import 'package:turismo_app/core/domain/repositories/place_repository.dart';
 import 'package:turismo_app/core/presentation/widgets/tourist_place_panel.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 import 'package:turismo_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:turismo_app/features/menu/data/repositories/place_min_repository_impl.dart';
+import 'package:turismo_app/features/menu/domain/entities/place_min.dart';
+import 'package:turismo_app/features/menu/domain/repositories/place_min_repository.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/quick_action_button.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/tourist_place_tile.dart';
 
 class MenuPage extends ConsumerWidget {
   final PlaceRepository repo = PlaceRepositoryImpl(datasource: FirebasePlaceDatasource());
+  final PlaceMinRepository _minRepo = PlaceMinRepositoryImpl();
 
   MenuPage({super.key});
+
+  Future<List<PlaceMin>> _loadPlaces() {
+    return _minRepo.getLimitViewedUniquePlaces(5);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -81,22 +88,43 @@ class MenuPage extends ConsumerWidget {
 
             // List
             Expanded(
-              child: ListView.separated(
-                itemCount: 5,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  return TouristPlaceTile(
-                    text: 'Lugar Turístico ${index + 1}',
-                    onTap: () async {
-                      Place p = (await repo.fetchPlace('places'))!;
+              child: FutureBuilder<List<PlaceMin>>(
+                future: _loadPlaces(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (_) => TouristPlacePanel(
-                          place: p
-                        ),
+                  if (snapshot.hasError) {
+                    return const Center(child: Text('Error al cargar lugares'));
+                  }
+
+                  final places = snapshot.data ?? [];
+
+                  if (places.isEmpty) {
+                    return const Center(child: Text('No hay lugares recientes. Prueba escaneando QRs.'));
+                  }
+
+                  return ListView.separated(
+                    itemCount: places.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final place = places[index];
+
+                      return TouristPlaceTile(
+                        place: place,
+                        onTap: () async {
+                          final p = await repo.fetchPlace(place.id);
+
+                          if (p == null) return;
+
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => TouristPlacePanel(place: p),
+                          );
+                        },
                       );
                     },
                   );
