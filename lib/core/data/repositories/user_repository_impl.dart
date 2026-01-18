@@ -1,5 +1,4 @@
 import 'package:turismo_app/core/data/datasources/firebase_user_datasource.dart';
-import 'package:turismo_app/core/domain/entities/place.dart';
 import 'package:turismo_app/core/domain/entities/user.dart';
 import 'package:turismo_app/core/domain/repositories/user_repository.dart';
 
@@ -30,7 +29,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<bool> ratePlace(User u, Place p, int ratingStars) {
+  Future<bool> ratePlace(String u, String p, int ratingStars) {
     return remote.addRating(u, p, ratingStars);
   }
 }

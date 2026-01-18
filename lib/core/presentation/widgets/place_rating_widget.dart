@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:turismo_app/core/data/datasources/firebase_user_datasource.dart';
+import 'package:turismo_app/core/data/repositories/user_repository_impl.dart';
+import 'package:turismo_app/core/domain/repositories/user_repository.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 
 class PlaceRatingWidget extends StatefulWidget {
-  final ValueChanged<int>? onRatingChanged;
+  final ValueChanged<int> onSubmit;
 
   const PlaceRatingWidget({
     super.key,
-    this.onRatingChanged,
+    required this.onSubmit
   });
 
   @override
@@ -14,14 +17,13 @@ class PlaceRatingWidget extends StatefulWidget {
 }
 
 class _PlaceRatingWidgetState extends State<PlaceRatingWidget> {
+  final UserRepository repo = UserRepositoryImpl(FirebaseUserdataSource());
   int _rating = 0;
 
   void _setRating(int value) {
     setState(() {
       _rating = value;
     });
-
-    widget.onRatingChanged?.call(value);
   }
 
   @override
@@ -83,8 +85,8 @@ class _PlaceRatingWidgetState extends State<PlaceRatingWidget> {
                   onPressed: _rating == 0
                     ? null
                     : () {
-                        print(_rating);
-                      },
+                      widget.onSubmit.call(_rating);
+                    },
                   style: TextButton.styleFrom(
                     padding: EdgeInsetsDirectional.symmetric(horizontal: 16, vertical: 4),
                     minimumSize: Size.zero,

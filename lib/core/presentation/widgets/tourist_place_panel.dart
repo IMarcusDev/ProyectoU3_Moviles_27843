@@ -2,7 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:turismo_app/core/data/datasources/firebase_user_datasource.dart';
+import 'package:turismo_app/core/data/repositories/user_repository_impl.dart';
 import 'package:turismo_app/core/domain/entities/place.dart';
+import 'package:turismo_app/core/domain/repositories/user_repository.dart';
 import 'package:turismo_app/core/presentation/widgets/place_rating_widget.dart';
 import 'package:turismo_app/core/presentation/widgets/slide_up_widget.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
@@ -20,6 +23,7 @@ class TouristPlacePanel extends StatefulWidget {
 }
 
 class _TouristPlacePanelState extends State<TouristPlacePanel> {
+  final UserRepository repo = UserRepositoryImpl(FirebaseUserdataSource());
   MapboxMap? _mapboxMap;
 
   Future<void> _onMapCreated(MapboxMap mapboxMap) async {
@@ -65,9 +69,8 @@ class _TouristPlacePanelState extends State<TouristPlacePanel> {
 
             // Acciones
             PlaceRatingWidget(
-              onRatingChanged: (rating) {
-                print('Calificación: $rating');
-                // enviar a backend / guardar localmente
+              onSubmit: (value) {
+                repo.ratePlace('GIUnpIV05j946MKvswxK', widget.place.id, value);
               },
             ),
 
