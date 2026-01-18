@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:turismo_app/core/data/datasources/firebase_place_datasource.dart';
+import 'package:turismo_app/core/data/repositories/place_repository_impl.dart';
 import 'package:turismo_app/core/domain/entities/place.dart';
-import 'package:turismo_app/core/domain/entities/preferences.dart';
+import 'package:turismo_app/core/domain/repositories/place_repository.dart';
 import 'package:turismo_app/core/presentation/widgets/tourist_place_panel.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/quick_action_button.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/tourist_place_tile.dart';
 
 class MenuPage extends StatelessWidget {
-  const MenuPage({super.key});
+  final PlaceRepository repo = PlaceRepositoryImpl(datasource: FirebasePlaceDatasource());
+
+  MenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,25 +83,15 @@ class MenuPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return TouristPlaceTile(
                     text: 'Lugar Turístico ${index + 1}',
-                    onTap: () {
+                    onTap: () async {
+                      Place p = (await repo.fetchPlace('places'))!;
+
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
                         backgroundColor: Colors.transparent,
                         builder: (_) => TouristPlacePanel(
-                          place: Place(
-                            id: '',
-                            name: 'Lugar 1',
-                            description: 'Lugar de prueba',
-                            latitude: -0.32,
-                            longitude: -78.46,
-                            vector: Preferences(
-                              culture: 0,
-                              hotel: 1,
-                              gastronomy: 0,
-                              nature: 0
-                            ),
-                          ),
+                          place: p
                         ),
                       );
                     },

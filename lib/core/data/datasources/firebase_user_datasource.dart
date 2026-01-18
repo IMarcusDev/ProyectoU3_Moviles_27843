@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:turismo_app/core/data/models/user_model.dart';
+import 'package:turismo_app/core/domain/entities/place.dart';
 import 'package:turismo_app/core/domain/entities/user.dart';
 
 class FirebaseUserdataSource {
@@ -46,5 +47,23 @@ class FirebaseUserdataSource {
     data['id'] = query.docs.first.id;
 
     return UserModel.fromJson(data).toEntity();
+  }
+
+  Future<bool> addRating(User u, Place p, int ratingStars) async {
+    try {
+      await firestore
+        .collection('users')
+        .doc(u.id.toString())
+        .set({
+          'ratings.${p.id}': ratingStars,
+        }, SetOptions(merge: true));
+
+      return true;
+    } on FirebaseException catch (e) {
+      if (e.code == 'not-found') {
+        return false;
+      }
+      rethrow;
+    }
   }
 }

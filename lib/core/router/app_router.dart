@@ -26,7 +26,7 @@ final appRouter = GoRouter(
       routes: [
         GoRoute(
           path: '/menu',
-          builder: (_, __) => const MenuPage(),
+          builder: (_, __) => MenuPage(),
         ),
         GoRoute(
           path: '/ar',

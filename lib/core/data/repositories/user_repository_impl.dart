@@ -1,4 +1,5 @@
 import 'package:turismo_app/core/data/datasources/firebase_user_datasource.dart';
+import 'package:turismo_app/core/domain/entities/place.dart';
 import 'package:turismo_app/core/domain/entities/user.dart';
 import 'package:turismo_app/core/domain/repositories/user_repository.dart';
 
@@ -26,5 +27,10 @@ class UserRepositoryImpl extends UserRepository {
   Future<User?> loginUser(String email, String password) {
     // Hash password
     return remote.loginUser(email, password);
+  }
+
+  @override
+  Future<bool> ratePlace(User u, Place p, int ratingStars) {
+    return remote.addRating(u, p, ratingStars);
   }
 }

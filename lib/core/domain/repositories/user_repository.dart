@@ -1,3 +1,4 @@
+import 'package:turismo_app/core/domain/entities/place.dart';
 import 'package:turismo_app/core/domain/entities/user.dart';
 
 abstract class UserRepository {
@@ -6,4 +7,5 @@ abstract class UserRepository {
   Future<User> createUser(User u);
   Future<User> modifyUser(User u);
 
+  Future<bool> ratePlace(User u, Place p, int ratingStars);
 }
