@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
+import 'package:turismo_app/features/auth/presentation/providers/auth_provider.dart';
 
-class UserPage extends StatelessWidget {
+class UserPage extends ConsumerWidget {
   const UserPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authProvider).user!;
+
     return Scaffold(
       backgroundColor: ThemeColors.bgColor,
       appBar: AppBar(
@@ -37,6 +41,8 @@ class UserPage extends StatelessWidget {
             tooltip: 'Cerrar sesión',
             icon: const Icon(Icons.logout, color: ThemeColors.error,),
             onPressed: () {
+              ref.read(authProvider.notifier).logout();
+
               context.go('/login');
             },
           ),
@@ -61,7 +67,7 @@ class UserPage extends StatelessWidget {
               spacing: 4,
               children: [
                 Text(
-                  'Nombre Apellido',
+                  '${user.name} ${user.surname}',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -69,7 +75,7 @@ class UserPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'email@ejemplo.com',
+                  user.email,
                   style: TextStyle(
                     fontSize: 14,
                     color: ThemeColors.textSecondary,
@@ -80,21 +86,21 @@ class UserPage extends StatelessWidget {
 
             Column(
               spacing: 12,
-              children: const [
+              children: [
                 _ProfileItem(
                   icon: Icons.person_outline,
                   label: 'Nombre',
-                  value: 'Nombre',
+                  value: user.name,
                 ),
                 _ProfileItem(
                   icon: Icons.badge_outlined,
                   label: 'Apellido',
-                  value: 'Apellido',
+                  value: user.surname,
                 ),
                 _ProfileItem(
                   icon: Icons.email_outlined,
                   label: 'Email',
-                  value: 'email@ejemplo.com',
+                  value: user.email,
                 ),
               ],
             ),
@@ -133,7 +139,7 @@ class _ProfileItem extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, color: ThemeColors.primaryGreen),
-          const SizedBox(width: 12), // ← aquí SÍ es correcto usarlo (Row)
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               label,
@@ -143,6 +149,7 @@ class _ProfileItem extends StatelessWidget {
               ),
             ),
           ),
+
           Text(
             value,
             style: TextStyle(

@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turismo_app/core/data/datasources/firebase_user_datasource.dart';
-import 'package:turismo_app/core/data/repositories/user_repository_impl.dart';
+import 'package:turismo_app/core/data/repositories/user_repository_provider.dart';
 import 'package:turismo_app/core/domain/entities/place.dart';
-import 'package:turismo_app/core/domain/repositories/user_repository.dart';
 import 'package:turismo_app/core/presentation/widgets/place_rating_widget.dart';
 import 'package:turismo_app/core/presentation/widgets/slide_up_widget.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
+import 'package:turismo_app/features/auth/presentation/providers/auth_provider.dart';
 
-class TouristPlacePanel extends StatefulWidget {
+class TouristPlacePanel extends ConsumerStatefulWidget {
   final Place place;
 
   const TouristPlacePanel({
@@ -19,11 +19,10 @@ class TouristPlacePanel extends StatefulWidget {
   });
 
   @override
-  State<TouristPlacePanel> createState() => _TouristPlacePanelState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _TouristPlacePanelState();
 }
 
-class _TouristPlacePanelState extends State<TouristPlacePanel> {
-  final UserRepository repo = UserRepositoryImpl(FirebaseUserdataSource());
+class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
   MapboxMap? _mapboxMap;
 
   Future<void> _onMapCreated(MapboxMap mapboxMap) async {
@@ -40,6 +39,8 @@ class _TouristPlacePanelState extends State<TouristPlacePanel> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(authProvider).user!;
+
     return SlideUpWidget(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
@@ -70,7 +71,9 @@ class _TouristPlacePanelState extends State<TouristPlacePanel> {
             // Acciones
             PlaceRatingWidget(
               onSubmit: (value) {
-                repo.ratePlace('GIUnpIV05j946MKvswxK', widget.place.id, value);
+                final repo = ref.read(userRepositoryProvider);
+
+                repo.ratePlace(user.id!, widget.place.id, value);
               },
             ),
 

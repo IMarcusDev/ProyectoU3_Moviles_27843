@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:turismo_app/core/data/datasources/firebase_place_datasource.dart';
 import 'package:turismo_app/core/data/repositories/place_repository_impl.dart';
@@ -6,16 +7,19 @@ import 'package:turismo_app/core/domain/entities/place.dart';
 import 'package:turismo_app/core/domain/repositories/place_repository.dart';
 import 'package:turismo_app/core/presentation/widgets/tourist_place_panel.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
+import 'package:turismo_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/quick_action_button.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/tourist_place_tile.dart';
 
-class MenuPage extends StatelessWidget {
+class MenuPage extends ConsumerWidget {
   final PlaceRepository repo = PlaceRepositoryImpl(datasource: FirebasePlaceDatasource());
 
   MenuPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authProvider).user!;
+
     return Scaffold(
       backgroundColor: ThemeColors.bgColor,
       appBar: AppBar(
@@ -31,7 +35,7 @@ class MenuPage extends StatelessWidget {
           children: [
             // Header
             Text(
-              'Bienvenido',
+              'Bienvenido ${user.name} ${user.surname}',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,

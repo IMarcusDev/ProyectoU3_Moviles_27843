@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 import 'package:turismo_app/features/ar_guide/pages/ar_cam_page.dart';
 import 'package:turismo_app/features/menu/presentation/pages/menu_page.dart';
 import 'package:turismo_app/features/user/presentation/pages/user_page.dart';
@@ -13,15 +12,15 @@ class AppPage extends StatefulWidget {
 }
 
 class _AppPageState extends State<AppPage> {
-  final PageController _pageController = PageController();
+  final PageController _controller = PageController();
 
-  final List<Widget> _pages = [
+  final _pages = [
     MenuPage(),
     ArCamPage(),
     UserPage(),
   ];
 
-  final List<String> _routes = ['/menu', '/ar', '/profile'];
+  final _routes = ['/menu', '/ar', '/profile'];
 
   int _indexFromLocation(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
@@ -34,10 +33,10 @@ class _AppPageState extends State<AppPage> {
   }
 
   void _onTapNav(int index) {
-    _pageController.animateToPage(
+    _controller.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
+      curve: Curves.easeOutCubic,
     );
   }
 
@@ -46,63 +45,36 @@ class _AppPageState extends State<AppPage> {
     final currentIndex = _indexFromLocation(context);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_pageController.hasClients && _pageController.page?.round() != currentIndex) {
-        _onTapNav(currentIndex);
+      if (_controller.hasClients &&
+          _controller.page?.round() != currentIndex) {
+        _controller.jumpToPage(currentIndex);
       }
     });
 
     return Scaffold(
-      backgroundColor: ThemeColors.bgColor,
       body: PageView(
-        controller: _pageController,
+        controller: _controller,
         onPageChanged: _onPageChanged,
         physics: const BouncingScrollPhysics(),
         children: _pages,
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 16,
-              offset: const Offset(0, -4),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: _onTapNav,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: ThemeColors.primaryGreen,
-          unselectedItemColor: ThemeColors.textSecondary,
-          selectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: _onTapNav,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explore),
+            label: 'Menú',
           ),
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 12,
+          BottomNavigationBarItem(
+            icon: Icon(Icons.view_in_ar),
+            label: 'AR',
           ),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.explore_outlined),
-              activeIcon: Icon(Icons.explore),
-              label: 'Menú',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.view_in_ar_outlined),
-              activeIcon: Icon(Icons.view_in_ar),
-              label: 'AR',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
-              label: 'Perfil',
-            ),
-          ],
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
       ),
     );
   }

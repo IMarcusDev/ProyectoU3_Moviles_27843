@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:turismo_app/core/data/datasources/firebase_user_datasource.dart';
-import 'package:turismo_app/core/data/repositories/user_repository_impl.dart';
+import 'package:turismo_app/core/data/repositories/user_repository_provider.dart';
 import 'package:turismo_app/core/domain/entities/user.dart';
-import 'package:turismo_app/core/domain/repositories/user_repository.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
-
+import 'package:turismo_app/features/auth/presentation/providers/auth_provider.dart';
 
 // ignore: must_be_immutable
-class LoginPage extends StatelessWidget {
-  final UserRepository repo = UserRepositoryImpl(FirebaseUserdataSource());
-
+class LoginPage extends ConsumerWidget {
   LoginPage({super.key});
 
   final _formKey = GlobalKey<FormState>();
@@ -18,7 +15,7 @@ class LoginPage extends StatelessWidget {
   String password = '';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: ThemeColors.bgColor,
       body: SafeArea(
@@ -146,9 +143,15 @@ class LoginPage extends StatelessWidget {
                                   if (_formKey.currentState!.validate()) {
                                     _formKey.currentState!.save();
 
+                                    final repo = ref.read(userRepositoryProvider);
+
                                     User? user = await repo.loginUser(email, password);
 
                                     if (user != null) {
+                                      ref
+                                        .read(authProvider.notifier)
+                                        .setUser(user);
+
                                       context.pushReplacement('/menu');
                                     } else {
                                       ScaffoldMessenger.of(context).showSnackBar(
