@@ -1,3 +1,4 @@
+import 'package:turismo_app/core/domain/entities/place_min.dart';
 import 'package:turismo_app/core/domain/entities/preferences.dart';
 
 class Place {
@@ -16,4 +17,12 @@ class Place {
     required this.longitude,
     required this.vector,
   });
+
+  PlaceMin toPlaceMin() {
+    return PlaceMin(
+      id: id,
+      name: name,
+      lastScanned: DateTime.now(),
+    );
+  }
 }

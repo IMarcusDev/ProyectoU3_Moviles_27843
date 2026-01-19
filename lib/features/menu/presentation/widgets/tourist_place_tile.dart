@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
-import 'package:turismo_app/features/menu/domain/entities/place_min.dart';
+import 'package:turismo_app/core/domain/entities/place_min.dart';
 
 class TouristPlaceTile extends StatelessWidget {
   final PlaceMin place;

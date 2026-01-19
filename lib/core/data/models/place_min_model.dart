@@ -1,4 +1,4 @@
-import 'package:turismo_app/features/menu/domain/entities/place_min.dart';
+import 'package:turismo_app/core/domain/entities/place_min.dart';
 
 class PlaceMinModel {
   final String id;

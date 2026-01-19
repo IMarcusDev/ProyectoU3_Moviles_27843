@@ -1,7 +1,7 @@
-import 'package:turismo_app/features/menu/data/datasources/sqlite_place_min_datasource.dart';
-import 'package:turismo_app/features/menu/data/models/place_min_model.dart';
-import 'package:turismo_app/features/menu/domain/entities/place_min.dart';
-import 'package:turismo_app/features/menu/domain/repositories/place_min_repository.dart';
+import 'package:turismo_app/core/data/datasources/sqlite_place_min_datasource.dart';
+import 'package:turismo_app/core/data/models/place_min_model.dart';
+import 'package:turismo_app/core/domain/entities/place_min.dart';
+import 'package:turismo_app/core/domain/repositories/place_min_repository.dart';
 
 class PlaceMinRepositoryImpl extends PlaceMinRepository {
   final SqlitePlaceMinDatasource datasource = SqlitePlaceMinDatasource();

@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:turismo_app/core/services/sqlite_db.dart';
-import 'package:turismo_app/features/menu/data/models/place_min_model.dart';
+import 'package:turismo_app/core/data/models/place_min_model.dart';
 
 class SqlitePlaceMinDatasource {
   Future<PlaceMinModel> savePlace(PlaceMinModel place) async {
