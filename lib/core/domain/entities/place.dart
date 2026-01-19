@@ -2,7 +2,7 @@ import 'package:turismo_app/core/domain/entities/place_min.dart';
 import 'package:turismo_app/core/domain/entities/preferences.dart';
 
 class Place {
-  final String id;
+  final String? id;
   final String name;
   final String description;
   final double latitude;
@@ -10,7 +10,7 @@ class Place {
   final Preferences vector;
 
   const Place({
-    required this.id,
+    this.id,
     required this.name,
     required this.description,
     required this.latitude,
@@ -18,9 +18,11 @@ class Place {
     required this.vector,
   });
 
-  PlaceMin toPlaceMin() {
+  PlaceMin? toPlaceMin() {
+    if (id == null) return null;
+
     return PlaceMin(
-      id: id,
+      id: id!,
       name: name,
       lastScanned: DateTime.now(),
     );

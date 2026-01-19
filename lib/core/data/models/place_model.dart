@@ -19,6 +19,7 @@ class PlaceModel {
   });
 
   PlaceModel copyWith({
+    String? id,
     String? name,
     String? description,
     double? latitude,
@@ -26,7 +27,7 @@ class PlaceModel {
     PreferencesModel? vector,
   }) {
     return PlaceModel(
-      id: id,
+      id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       latitude: latitude ?? this.latitude,

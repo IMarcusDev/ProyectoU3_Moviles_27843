@@ -73,7 +73,7 @@ class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
               onSubmit: (value) {
                 final repo = ref.read(userRepositoryProvider);
 
-                repo.ratePlace(user.id!, widget.place.id, value);
+                repo.ratePlace(user.id!, widget.place.id!, value);
               },
             ),
 

@@ -54,7 +54,7 @@ class _ArCamPageState extends State<ArCamPage> {
               _scanned = false;
             });
 
-            placeMinRepo.addPlace(place.toPlaceMin());
+            placeMinRepo.addPlace(place.toPlaceMin()!);
           }
         },
       ),

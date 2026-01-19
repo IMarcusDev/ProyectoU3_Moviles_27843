@@ -13,4 +13,9 @@ class PlaceRepositoryImpl extends PlaceRepository {
   Future<Place?> fetchPlace(String id) async {
     return (await datasource.getPlaceById(id))?.toEntity();
   }
+
+  @override
+  Future<Place> addPlace(Place p) async {
+    return (await datasource.addPlace(p)).toEntity();
+  }
 }
