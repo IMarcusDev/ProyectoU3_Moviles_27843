@@ -15,7 +15,7 @@ def add_place():
         "description": "Este es un lugar de prueba, únicamente para comprobar si funciona correctamente.",
         "latitude": 0,
         "longitude": 0,
-        "vector": {
+        "interestVector": {
             "culture": 1,
             "gastronomy": 0,
             "hotel": 0,
