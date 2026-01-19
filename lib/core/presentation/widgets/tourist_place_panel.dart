@@ -24,6 +24,7 @@ class TouristPlacePanel extends ConsumerStatefulWidget {
 
 class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
   MapboxMap? _mapboxMap;
+  CircleAnnotationManager? _circleAnnotationManager;
 
   Future<void> _onMapCreated(MapboxMap mapboxMap) async {
     _mapboxMap = mapboxMap;
@@ -33,6 +34,28 @@ class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
         enabled: true,
         pulsingEnabled: true,
         pulsingColor: Colors.blueAccent.value,
+      ),
+    );
+  }
+
+  Future<void> _onStyleLoaded(StyleLoadedEventData event) async {
+    if (_mapboxMap == null) return;
+
+    _circleAnnotationManager ??=
+        await _mapboxMap!.annotations.createCircleAnnotationManager();
+
+    await _circleAnnotationManager!.create(
+      CircleAnnotationOptions(
+        geometry: Point(
+          coordinates: Position(
+            widget.place.longitude,
+            widget.place.latitude,
+          ),
+        ),
+        circleRadius: 8,
+        circleColor: ThemeColors.primaryGreen.value,
+        circleStrokeWidth: 2,
+        circleStrokeColor: Colors.white.value,
       ),
     );
   }
@@ -108,6 +131,7 @@ class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
                       zoom: 14.0,
                     ),
                     onMapCreated: _onMapCreated,
+                    onStyleLoadedListener: _onStyleLoaded,
                   )
                 ),
               ),

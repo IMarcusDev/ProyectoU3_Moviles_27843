@@ -1,4 +1,8 @@
 import firebase_admin
+import json
+import sys
+import qrcode
+import re
 from firebase_admin import credentials, firestore
 
 # Inicializar Firebase
@@ -7,26 +11,23 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-def add_place():
-    doc_ref = db.collection("places").document()  # ID automático
+def add_place(place: map):
+  doc_ref = db.collection("places").document()  # ID automático
 
-    place = {
-        "name": "Lugar de Prueba",
-        "description": "Este es un lugar de prueba, únicamente para comprobar si funciona correctamente.",
-        "latitude": 0,
-        "longitude": 0,
-        "interestVector": {
-            "culture": 1,
-            "gastronomy": 0,
-            "hotel": 0,
-            "nature": 0
-        }
-    }
+  doc_ref.set(place)
 
-    doc_ref.set(place)
-
-    # Output igual que Dart
-    print(f"{doc_ref.id}|{place['name']}")
+  return doc_ref.id
 
 if __name__ == "__main__":
-    add_place()
+  with open('lugares_pichincha.json') as f:
+    data = json.load(f)
+
+    for place in data:
+      place_id = add_place(place)
+
+      safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', place['name'])
+
+      img = qrcode.make(place_id)
+      img.save(f"img/{safe_name}.png")
+
+      print(f'Se generó la imagen {safe_name}')

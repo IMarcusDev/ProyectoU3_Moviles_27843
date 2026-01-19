@@ -1,0 +1,290 @@
+[
+    {
+        "name": "Mitad del Mundo",
+        "description": "Monumento y museo que marca la línea ecuatorial, donde puedes estar en dos hemisferios al mismo tiempo.",
+        "latitude": -0.0022,
+        "longitude": -78.4558,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Centro Histórico de Quito",
+        "description": "Patrimonio de la Humanidad por la UNESCO, con arquitectura colonial, iglesias y plazas históricas.",
+        "latitude": -0.2201,
+        "longitude": -78.5123,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Basílica del Voto Nacional",
+        "description": "Iglesia neogótica más grande de América, con impresionantes torres y vistas panorámicas de Quito.",
+        "latitude": -0.2150,
+        "longitude": -78.5070,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Teleférico de Quito",
+        "description": "Sistema de transporte aéreo que llega a 4,050 metros de altura con vistas espectaculares de la ciudad y volcanes.",
+        "latitude": -0.1897,
+        "longitude": -78.5214,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Volcán Pichincha",
+        "description": "Volcán activo que domina el paisaje de Quito, ideal para senderismo y aventura.",
+        "latitude": -0.1714,
+        "longitude": -78.5983,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Laguna de Mojanda",
+        "description": "Conjunto de tres lagunas de origen volcánico rodeadas de páramo y paisajes andinos.",
+        "latitude": 0.1333,
+        "longitude": -78.2667,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Reserva Geobotánica Pululahua",
+        "description": "Cráter volcánico habitado con microclima único, ideal para caminatas y observación de flora.",
+        "latitude": 0.0417,
+        "longitude": -78.5000,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Iglesia de la Compañía de Jesús",
+        "description": "Obra maestra del barroco sudamericano con interior cubierto de pan de oro.",
+        "latitude": -0.2197,
+        "longitude": -78.5148,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Plaza Grande",
+        "description": "Plaza central de Quito rodeada por el Palacio de Carondelet, la Catedral y edificios históricos.",
+        "latitude": -0.2203,
+        "longitude": -78.5125,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "El Panecillo",
+        "description": "Colina con la estatua de la Virgen de Quito, ofrece vistas panorámicas de toda la ciudad.",
+        "latitude": -0.2300,
+        "longitude": -78.5183,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Mindo",
+        "description": "Bosque nublado famoso por su biodiversidad, avistamiento de aves y actividades de aventura.",
+        "latitude": -0.0500,
+        "longitude": -78.7667,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Cascadas de Mindo",
+        "description": "Serie de cascadas en el bosque nublado accesibles mediante senderos ecológicos.",
+        "latitude": -0.0550,
+        "longitude": -78.7700,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Mercado de Otavalo",
+        "description": "Famoso mercado indígena con artesanías, textiles y productos tradicionales ecuatorianos.",
+        "latitude": 0.2342,
+        "longitude": -78.2614,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 1,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Laguna de San Pablo",
+        "description": "Hermosa laguna al pie del volcán Imbabura, ideal para deportes acuáticos y paseos.",
+        "latitude": 0.2167,
+        "longitude": -78.2167,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Parque La Carolina",
+        "description": "Gran parque urbano de Quito con jardín botánico, vivarium y espacios recreativos.",
+        "latitude": -0.1833,
+        "longitude": -78.4833,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Museo Nacional del Ecuador",
+        "description": "Principal museo del país con colecciones de arte precolombino, colonial y contemporáneo.",
+        "latitude": -0.2120,
+        "longitude": -78.4900,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Calle La Ronda",
+        "description": "Calle bohemia con arquitectura colonial, talleres artesanales, restaurantes y vida nocturna.",
+        "latitude": -0.2250,
+        "longitude": -78.5150,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 1,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Santuario de Guápulo",
+        "description": "Iglesia colonial del siglo XVII con arte barroco, ubicada en un pintoresco barrio de Quito.",
+        "latitude": -0.2000,
+        "longitude": -78.4750,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Termas de Papallacta",
+        "description": "Aguas termales naturales en los Andes, perfectas para relajación con vistas al páramo.",
+        "latitude": -0.3667,
+        "longitude": -78.1500,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 0,
+            "hotel": 1,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Bosque Protector Pasochoa",
+        "description": "Reserva ecológica en un antiguo cráter volcánico con senderos y biodiversidad andina.",
+        "latitude": -0.4333,
+        "longitude": -78.5000,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Museo Intiñan",
+        "description": "Museo interactivo cerca de la Mitad del Mundo con experimentos sobre la línea ecuatorial.",
+        "latitude": -0.0030,
+        "longitude": -78.4560,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Capilla del Hombre",
+        "description": "Museo dedicado a la obra del artista Oswaldo Guayasamín con arte latinoamericano.",
+        "latitude": -0.1950,
+        "longitude": -78.4700,
+        "interestVector": {
+            "culture": 1,
+            "gastronomy": 0,
+            "hotel": 0,
+            "nature": 0
+        }
+    },
+    {
+        "name": "Cayambe",
+        "description": "Ciudad conocida por sus bizcochos tradicionales y el volcán nevado Cayambe.",
+        "latitude": 0.0417,
+        "longitude": -78.1500,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 1,
+            "hotel": 0,
+            "nature": 1
+        }
+    },
+    {
+        "name": "Plaza Foch",
+        "description": "Centro de entretenimiento y gastronomía en la zona de La Mariscal con restaurantes y bares.",
+        "latitude": -0.2030,
+        "longitude": -78.4920,
+        "interestVector": {
+            "culture": 0,
+            "gastronomy": 1,
+            "hotel": 0,
+            "nature": 0
+        }
+    }
+]
