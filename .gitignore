@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# QR Images
+/lib/features/qr_gen/img
+/lib/features/qr_gen/venv
