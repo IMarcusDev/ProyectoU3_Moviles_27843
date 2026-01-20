@@ -18,4 +18,9 @@ class PlaceRepositoryImpl extends PlaceRepository {
   Future<Place> addPlace(Place p) async {
     return (await datasource.addPlace(p)).toEntity();
   }
+
+  @override
+  Future<List<Place>> fetchLimitRecomendations(String id, int limit) async {
+    return (await datasource.getLimitRecomendations(id, limit)).map((e) => e.toEntity()).toList();
+  }
 }

@@ -54,4 +54,12 @@ class SqlitePlaceMinDatasource {
 
     return result.map((row) => PlaceMinModel.fromJson(row)).toList();
   }
+
+  Future<void> deleteAllPlaces() async {
+    final db = await SqliteDb.database;
+
+    await db.delete(
+      'places_min',
+    );
+  }
 }

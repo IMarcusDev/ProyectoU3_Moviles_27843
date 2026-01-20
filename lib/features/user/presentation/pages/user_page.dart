@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:turismo_app/core/presentation/providers/place_min_provider.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
-import 'package:turismo_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:turismo_app/core/presentation/providers/auth_provider.dart';
 
 class UserPage extends ConsumerWidget {
   const UserPage({super.key});
@@ -42,6 +43,7 @@ class UserPage extends ConsumerWidget {
             icon: const Icon(Icons.logout, color: ThemeColors.error,),
             onPressed: () {
               ref.read(authProvider.notifier).logout();
+              ref.read(viewedPlacesProvider.notifier).clearAll();
 
               context.go('/login');
             },

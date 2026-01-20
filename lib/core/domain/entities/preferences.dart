@@ -43,4 +43,13 @@ class Preferences {
   List<double> toList() {
     return [hotel, gastronomy, nature, culture];
   }
+
+  factory Preferences.fromList(List<double> list) {
+    return Preferences(
+      hotel: list[0],
+      gastronomy: list[1],
+      nature: list[2],
+      culture: list[3]
+    );
+  }
 }

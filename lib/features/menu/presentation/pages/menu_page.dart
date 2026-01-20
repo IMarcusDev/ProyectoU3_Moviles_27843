@@ -6,12 +6,12 @@ import 'package:turismo_app/core/data/repositories/place_repository_impl.dart';
 import 'package:turismo_app/core/domain/repositories/place_repository.dart';
 import 'package:turismo_app/core/presentation/widgets/tourist_place_panel.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
-import 'package:turismo_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:turismo_app/core/presentation/providers/auth_provider.dart';
 import 'package:turismo_app/core/data/repositories/place_min_repository_impl.dart';
 import 'package:turismo_app/core/domain/entities/place_min.dart';
 import 'package:turismo_app/core/domain/repositories/place_min_repository.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/quick_action_button.dart';
-import 'package:turismo_app/features/menu/presentation/widgets/tourist_place_tile.dart';
+import 'package:turismo_app/core/presentation/widgets/tourist_place_tile.dart';
 
 class MenuPage extends ConsumerWidget {
   final PlaceRepository repo = PlaceRepositoryImpl(datasource: FirebasePlaceDatasource());

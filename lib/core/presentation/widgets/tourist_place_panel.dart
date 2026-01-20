@@ -6,9 +6,10 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turismo_app/core/data/repositories/user_repository_provider.dart';
 import 'package:turismo_app/core/domain/entities/place.dart';
 import 'package:turismo_app/core/presentation/widgets/place_rating_widget.dart';
+import 'package:turismo_app/core/presentation/widgets/recomendation_slidebar.dart';
 import 'package:turismo_app/core/presentation/widgets/slide_up_widget.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
-import 'package:turismo_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:turismo_app/core/presentation/providers/auth_provider.dart';
 
 class TouristPlacePanel extends ConsumerStatefulWidget {
   final Place place;
@@ -33,7 +34,7 @@ class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
       LocationComponentSettings(
         enabled: true,
         pulsingEnabled: true,
-        pulsingColor: Colors.blueAccent.value,
+        pulsingColor: Colors.blueAccent.toARGB32(),
       ),
     );
   }
@@ -53,9 +54,9 @@ class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
           ),
         ),
         circleRadius: 8,
-        circleColor: ThemeColors.primaryGreen.value,
+        circleColor: ThemeColors.primaryGreen.toARGB32(),
         circleStrokeWidth: 2,
-        circleStrokeColor: Colors.white.value,
+        circleStrokeColor: Colors.white.toARGB32(),
       ),
     );
   }
@@ -91,7 +92,7 @@ class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
               ),
             ),
 
-            // Acciones
+            // Rating
             PlaceRatingWidget(
               onSubmit: (value) {
                 final repo = ref.read(userRepositoryProvider);
@@ -100,6 +101,20 @@ class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
               },
             ),
 
+            // Recomendaciones
+            Text(
+              'Lugares Similares',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: ThemeColors.textPrimary,
+              ),
+            ),
+            RecomendationSlidebar(
+              placeReferenceId: widget.place.id!,
+            ),
+
+            // Ubicación
             Text(
               'Ubicación',
               style: const TextStyle(

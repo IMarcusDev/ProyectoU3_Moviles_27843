@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:turismo_app/core/data/repositories/user_repository_provider.dart';
 import 'package:turismo_app/core/domain/entities/user.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
-import 'package:turismo_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:turismo_app/core/presentation/providers/auth_provider.dart';
 
 // ignore: must_be_immutable
 class LoginPage extends ConsumerWidget {

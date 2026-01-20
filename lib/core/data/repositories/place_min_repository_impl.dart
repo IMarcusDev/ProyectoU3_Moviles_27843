@@ -20,4 +20,9 @@ class PlaceMinRepositoryImpl extends PlaceMinRepository {
   Future<PlaceMin> addPlace(PlaceMin p) async {
     return (await datasource.savePlace(PlaceMinModel.fromEntity(p))).toEntity();
   }
+  
+  @override
+  Future<void> removeAllPlaces() async {
+    return await datasource.deleteAllPlaces();
+  }
 }
