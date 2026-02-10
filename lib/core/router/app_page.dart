@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:turismo_app/features/ar_guide/pages/ar_cam_page.dart';
 import 'package:turismo_app/features/menu/presentation/pages/menu_page.dart';
 import 'package:turismo_app/features/user/presentation/pages/user_page.dart';
+import 'package:turismo_app/core/presentation/widgets/modern_bottom_nav_bar.dart';
+import 'package:turismo_app/core/navigation/app_navigation.dart';
 
 class AppPage extends StatefulWidget {
   const AppPage({super.key});
@@ -12,69 +13,57 @@ class AppPage extends StatefulWidget {
 }
 
 class _AppPageState extends State<AppPage> {
-  final PageController _controller = PageController();
+  late final PageController _pageController;
+  int _currentIndex = 0;
 
-  final _pages = [
-    MenuPage(),
-    ArCamPage(),
-    UserPage(),
+  // Las 3 páginas principales de la app
+  final List<Widget> _pages = [
+    MenuPage(key: const ValueKey('menu')),
+    const ArCamPage(key: ValueKey('ar')),
+    UserPage(key: const ValueKey('profile')),
   ];
 
-  final _routes = ['/menu', '/ar', '/profile'];
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 0);
+  }
 
-  int _indexFromLocation(BuildContext context) {
-    final location = GoRouterState.of(context).uri.toString();
-    final index = _routes.indexWhere((r) => location.startsWith(r));
-    return index == -1 ? 0 : index;
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   void _onPageChanged(int index) {
-    context.go(_routes[index]);
+    setState(() {
+      _currentIndex = index;
+    });
   }
 
-  void _onTapNav(int index) {
-    _controller.animateToPage(
+  void _onNavBarTap(int index) {
+    _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOutCubic,
+      curve: Curves.easeInOutCubic,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentIndex = _indexFromLocation(context);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_controller.hasClients &&
-          _controller.page?.round() != currentIndex) {
-        _controller.jumpToPage(currentIndex);
-      }
-    });
-
-    return Scaffold(
-      body: PageView(
-        controller: _controller,
-        onPageChanged: _onPageChanged,
-        physics: const BouncingScrollPhysics(),
-        children: _pages,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: _onTapNav,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Menú',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.view_in_ar),
-            label: 'AR',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
-        ],
+    return AppNavigation(
+      controller: AppNavigationController(_pageController),
+      child: Scaffold(
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: _onPageChanged,
+          physics: const BouncingScrollPhysics(),
+          children: _pages,
+        ),
+        bottomNavigationBar: ModernBottomNavBar(
+          currentIndex: _currentIndex,
+          onTap: _onNavBarTap,
+        ),
       ),
     );
   }

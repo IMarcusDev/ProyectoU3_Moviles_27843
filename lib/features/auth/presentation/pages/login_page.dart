@@ -19,179 +19,178 @@ class LoginPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: ThemeColors.bgColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              // Logo
-              Expanded(
-                flex: 3,
-                child: Column(
-                  spacing: 12,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    CircleAvatar(
-                      radius: 48,
-                      backgroundColor: Color(0xFFE8F5E9),
-                      child: Icon(
-                        Icons.travel_explore,
-                        size: 40,
-                        color: ThemeColors.primaryGreen,
-                      ),
-                    ),
-                    Text(
-                      'App Turismo',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: ThemeColors.textPrimary,
-                      ),
-                    ),
-                  ],
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - 32,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Espaciado superior
+                const SizedBox(height: 40),
+
+                // Logo
+                const CircleAvatar(
+                  radius: 48,
+                  backgroundColor: Color(0xFFE8F5E9),
+                  child: Icon(
+                    Icons.travel_explore,
+                    size: 40,
+                    color: ThemeColors.primaryGreen,
+                  ),
                 ),
-              ),
+                const SizedBox(height: 12),
+                const Text(
+                  'App Turismo',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: ThemeColors.textPrimary,
+                  ),
+                ),
 
-              SizedBox(height: 32,),
+                const SizedBox(height: 48),
 
-              // Credentials
-              Expanded(
-                flex: 5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Form(
-                      key: _formKey,
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: ThemeColors.cardColor,
-                          borderRadius: BorderRadius.circular(28),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.04),
-                              blurRadius: 20,
-                              offset: const Offset(0, 8),
+                // Credentials
+                Form(
+                  key: _formKey,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: ThemeColors.cardColor,
+                      borderRadius: BorderRadius.circular(28),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.04),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      spacing: 16,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16)),
+                            ),
+                          ),
+                          validator: (v) =>
+                              v == null || v.isEmpty ? 'Requerido' : null,
+                          onSaved: (v) => email = v ?? '',
+                        ),
+
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Contraseña',
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16)),
+                            ),
+                          ),
+                          obscureText: true,
+                          validator: (v) =>
+                              v != null && v.length < 6 ? 'Mínimo 6' : null,
+                          onSaved: (v) => password = v ?? '',
+                        ),
+
+                        // Link registro
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              '¿No tienes un usuario? ',
+                              style: TextStyle(color: ThemeColors.textSecondary),
+                            ),
+                            InkWell(
+                              onTap: () => context.push('/register'),
+                              child: const Text(
+                                'Regístrate aquí',
+                                style: TextStyle(
+                                  color: ThemeColors.primaryGreen,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                        child: Column(
-                          spacing: 16,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: 'Email',
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(16)),
-                                ),
+
+                        // Botón login
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: ThemeColors.primaryGreen,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18),
                               ),
-                              validator: (v) =>
-                                  v == null || v.isEmpty ? 'Requerido' : null,
-                              onSaved: (v) => email = v ?? '',
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
                             ),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
 
-                            TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: 'Contraseña',
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(16)),
-                                ),
-                              ),
-                              obscureText: true,
-                              validator: (v) =>
-                                  v != null && v.length < 6 ? 'Mínimo 6' : null,
-                              onSaved: (v) => password = v ?? '',
-                            ),
+                                final repo = ref.read(userRepositoryProvider);
 
-                            // Link registro
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  '¿No tienes un usuario? ',
-                                  style: TextStyle(color: ThemeColors.textSecondary),
-                                ),
-                                InkWell(
-                                  onTap: () => context.push('/register'),
-                                  child: const Text(
-                                    'Regístrate aquí',
-                                    style: TextStyle(
-                                      color: ThemeColors.primaryGreen,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                                User? user = await repo.loginUser(email, password);
 
-                            // Botón login
-                            SizedBox(
-                              width: double.infinity,
-                              // height: 52,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: ThemeColors.primaryGreen,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  elevation: 0,
-                                ),
-                                onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    _formKey.currentState!.save();
+                                if (user != null) {
+                                  ref
+                                    .read(authProvider.notifier)
+                                    .setUser(user);
 
-                                    final repo = ref.read(userRepositoryProvider);
-
-                                    User? user = await repo.loginUser(email, password);
-
-                                    if (user != null) {
-                                      ref
-                                        .read(authProvider.notifier)
-                                        .setUser(user);
-
-                                      context.pushReplacement('/menu');
-                                    } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Credenciales incorrectas.',
-                                          ),
-                                          duration: Duration(seconds: 2),
-                                        ),
-                                      );
-                                    }
-                                  } else {
+                                  if (context.mounted) {
+                                    context.pushReplacement('/app');
+                                  }
+                                } else {
+                                  if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
-                                          'Completa los campos nuevamente.',
+                                          'Credenciales incorrectas.',
                                         ),
                                         duration: Duration(seconds: 2),
                                       ),
                                     );
                                   }
-                                },
-                                child: const Text(
-                                  'Iniciar sesión',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Completa los campos nuevamente.',
+                                    ),
+                                    duration: Duration(seconds: 2),
                                   ),
-                                ),
+                                );
+                              }
+                            },
+                            child: const Text(
+                              'Iniciar sesión',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                )
-              ),
-            ],
+                  ),
+                ),
+
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),

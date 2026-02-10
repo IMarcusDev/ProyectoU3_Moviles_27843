@@ -3,13 +3,16 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turismo_app/core/data/repositories/user_repository_provider.dart';
+import 'package:turismo_app/core/data/repositories/rating_repository_provider.dart';
 import 'package:turismo_app/core/domain/entities/place.dart';
+import 'package:turismo_app/core/domain/entities/rating.dart' as rating_entity;
 import 'package:turismo_app/core/presentation/widgets/place_rating_widget.dart';
+import 'package:turismo_app/core/presentation/widgets/comments_section.dart';
 import 'package:turismo_app/core/presentation/widgets/recomendation_slidebar.dart';
 import 'package:turismo_app/core/presentation/widgets/slide_up_widget.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 import 'package:turismo_app/core/presentation/providers/auth_provider.dart';
+import 'package:turismo_app/core/utils/ui/app_snackbar.dart';
 
 class TouristPlacePanel extends ConsumerStatefulWidget {
   final Place place;
@@ -26,6 +29,20 @@ class TouristPlacePanel extends ConsumerStatefulWidget {
 class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
   MapboxMap? _mapboxMap;
   CircleAnnotationManager? _circleAnnotationManager;
+  late Future<rating_entity.Rating?> _existingRatingFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    // Cachear el Future para evitar recargas cuando aparece el teclado
+    _loadExistingRating();
+  }
+
+  void _loadExistingRating() {
+    final user = ref.read(authProvider).user!;
+    final ratingRepo = ref.read(ratingRepositoryProvider);
+    _existingRatingFuture = ratingRepo.getUserRatingForPlace(user.id!, widget.place.id!);
+  }
 
   Future<void> _onMapCreated(MapboxMap mapboxMap) async {
     _mapboxMap = mapboxMap;
@@ -92,19 +109,88 @@ class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
               ),
             ),
 
-            // Rating
-            PlaceRatingWidget(
-              onSubmit: (value) {
-                final repo = ref.read(userRepositoryProvider);
+            // Rating (con FutureBuilder para cargar calificación existente)
+            FutureBuilder<rating_entity.Rating?>(
+              future: _existingRatingFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: ThemeColors.primaryGreen,
+                      ),
+                    ),
+                  );
+                }
 
-                repo.ratePlace(user.id!, widget.place.id!, value);
+                final existingRating = snapshot.data;
+
+                return PlaceRatingWidget(
+                  existingRating: existingRating,
+                  onSubmit: (stars, comment) async {
+                    final ratingRepo = ref.read(ratingRepositoryProvider);
+
+                    // Crear o actualizar Rating
+                    final newRating = rating_entity.Rating(
+                      id: existingRating?.id, // Mantener ID si existe para actualizar
+                      userId: user.id!,
+                      userName: user.name,
+                      placeId: widget.place.id!,
+                      stars: stars,
+                      comment: comment,
+                      createdAt: existingRating?.createdAt ?? DateTime.now(),
+                    );
+
+                    try {
+                      await ratingRepo.saveRating(newRating);
+
+                      // Mostrar confirmación
+                      if (!mounted) return;
+                      AppSnackbar.showSuccess(
+                        context,
+                        existingRating != null
+                            ? '¡Calificación actualizada!'
+                            : (comment != null && comment.isNotEmpty
+                                ? '¡Calificación y comentario enviados!'
+                                : '¡Calificación de $stars ⭐ enviada!'),
+                      );
+
+                      // Recargar la calificación y comentarios
+                      setState(() {
+                        _loadExistingRating();
+                      });
+                    } catch (e) {
+                      if (!mounted) return;
+                      AppSnackbar.showError(
+                        context,
+                        'Error al guardar calificación',
+                      );
+                    }
+                  },
+                );
               },
             ),
 
+            // Comentarios y Calificaciones
+            const Text(
+              'Comentarios y Calificaciones',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: ThemeColors.textPrimary,
+              ),
+            ),
+            CommentsSection(
+              placeId: widget.place.id!,
+            ),
+
             // Recomendaciones
-            Text(
+            const Text(
               'Lugares Similares',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: ThemeColors.textPrimary,
@@ -115,9 +201,9 @@ class _TouristPlacePanelState extends ConsumerState<TouristPlacePanel> {
             ),
 
             // Ubicación
-            Text(
+            const Text(
               'Ubicación',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: ThemeColors.textPrimary,

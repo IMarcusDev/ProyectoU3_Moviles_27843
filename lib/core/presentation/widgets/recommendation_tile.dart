@@ -1,38 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
 import 'package:turismo_app/core/utils/theme/app_spacing.dart';
-import 'package:turismo_app/core/domain/entities/place_min.dart';
+import 'package:turismo_app/core/domain/entities/place.dart';
 
-class TouristPlaceTile extends StatelessWidget {
-  final PlaceMin place;
+/// Widget para mostrar lugares recomendados (sin "visto recientemente")
+class RecommendationTile extends StatelessWidget {
+  final Place place;
   final VoidCallback? onTap;
 
-  const TouristPlaceTile({
+  const RecommendationTile({
     super.key,
     required this.place,
     this.onTap,
   });
-
-  String formatLastScanned(DateTime lastScanned) {
-    final now = DateTime.now();
-    final diff = now.difference(lastScanned);
-
-    if (diff.inMinutes < 1) {
-      return 'Visto recientemente';
-    } else if (diff.inMinutes < 60) {
-      return 'Visto hace ${diff.inMinutes} minuto${diff.inMinutes == 1 ? '' : 's'}';
-    } else if (diff.inHours < 24) {
-      return 'Visto hace ${diff.inHours} hora${diff.inHours == 1 ? '' : 's'}';
-    } else if (diff.inDays < 7) {
-      return 'Visto hace ${diff.inDays} día${diff.inDays == 1 ? '' : 's'}';
-    } else {
-      return 'Visto el ${_formatDate(lastScanned)}';
-    }
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +56,7 @@ class TouristPlaceTile extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       place.name,
@@ -90,12 +71,14 @@ class TouristPlaceTile extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
-                      formatLastScanned(place.lastScanned),
+                      place.description,
                       style: const TextStyle(
                         fontSize: 13,
                         color: ThemeColors.textSecondary,
                         height: 1.2,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

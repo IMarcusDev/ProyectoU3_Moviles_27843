@@ -6,12 +6,15 @@ import 'package:turismo_app/core/data/repositories/place_repository_impl.dart';
 import 'package:turismo_app/core/domain/repositories/place_repository.dart';
 import 'package:turismo_app/core/presentation/widgets/tourist_place_panel.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
+import 'package:turismo_app/core/utils/theme/app_spacing.dart';
 import 'package:turismo_app/core/presentation/providers/auth_provider.dart';
 import 'package:turismo_app/core/data/repositories/place_min_repository_impl.dart';
 import 'package:turismo_app/core/domain/entities/place_min.dart';
 import 'package:turismo_app/core/domain/repositories/place_min_repository.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/quick_action_button.dart';
 import 'package:turismo_app/core/presentation/widgets/tourist_place_tile.dart';
+import 'package:turismo_app/core/navigation/app_navigation.dart';
+import 'package:turismo_app/core/utils/scripts/add_category_to_places.dart';
 
 class MenuPage extends ConsumerWidget {
   final PlaceRepository repo = PlaceRepositoryImpl(datasource: FirebasePlaceDatasource());
@@ -30,110 +33,389 @@ class MenuPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: ThemeColors.bgColor,
       appBar: AppBar(
-        title: const Text('Inicio'),
+        title: const Text(
+          'Inicio',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: ThemeColors.textPrimary,
+          ),
+        ),
         backgroundColor: ThemeColors.bgColor,
+        elevation: 0,
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 24,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.pagePadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header con bienvenida
+              _buildWelcomeHeader(user.name, user.surname),
+
+              const SizedBox(height: AppSpacing.sectionSpacing),
+
+              // Acciones rápidas
+              _buildQuickActions(context),
+
+              const SizedBox(height: AppSpacing.sectionSpacing),
+
+              // Sección de recientes
+              _buildSectionHeader('Lugares Recientes'),
+
+              const SizedBox(height: AppSpacing.lg),
+
+              // Lista de lugares
+              Expanded(
+                child: FutureBuilder<List<PlaceMin>>(
+                  future: _loadPlaces(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return _buildLoadingState();
+                    }
+
+                    if (snapshot.hasError) {
+                      return _buildErrorState();
+                    }
+
+                    final places = snapshot.data ?? [];
+
+                    if (places.isEmpty) {
+                      return _buildEmptyState(context);
+                    }
+
+                    return _buildPlacesList(context, places);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWelcomeHeader(String name, String surname) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Hola, $name 👋',
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: ThemeColors.textPrimary,
+            height: 1.2,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        const Text(
+          'Descubre lugares increíbles cerca de ti',
+          style: TextStyle(
+            fontSize: 14,
+            color: ThemeColors.textSecondary,
+            height: 1.4,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuickActions(BuildContext context) {
+    return Column(
+      children: [
+        Row(
           children: [
-            // Header
-            Text(
-              'Bienvenido ${user.name} ${user.surname}',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: ThemeColors.textPrimary,
+            Expanded(
+              child: QuickActionButton(
+                icon: Icons.map_outlined,
+                label: 'Explorar Mapa',
+                onTap: () => context.push('/map'),
               ),
             ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: QuickActionButton(
+                icon: Icons.person_outline,
+                label: 'Mi Perfil',
+                onTap: () => AppNavigation.of(context).goToProfile(),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.md),
+      ],
+    );
+  }
 
-            // Fast actions
-            Row(
-              spacing: 8,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Future<void> _runMigration(BuildContext context) async {
+    // Mostrar confirmación
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('⚠️ Migración de Base de Datos'),
+        content: const Text(
+          'Esto agregará el campo "category" con valor "Sin categoría" '
+          'a todos los lugares que no lo tengan.\n\n'
+          '¿Deseas continuar?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orange,
+            ),
+            child: const Text('Ejecutar Migración'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    // Mostrar loading
+    if (!context.mounted) return;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: Card(
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: QuickActionButton(
-                    icon: Icons.map_outlined,
-                    label: 'Mapa',
-                    onTap: () {
-                      context.push('/map');
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: QuickActionButton(
-                    icon: Icons.person_outline,
-                    label: 'Perfil',
-                    onTap: () {
-                      context.go('/profile');
-                    },
-                  ),
-                ),
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Ejecutando migración...'),
               ],
             ),
+          ),
+        ),
+      ),
+    );
 
-            // Recent section
-            Text(
-              'Recientes',
+    try {
+      final migration = AddCategoryToPlacesMigration();
+      await migration.migrate(defaultCategory: 'Sin categoría');
+
+      // Cerrar loading
+      if (!context.mounted) return;
+      Navigator.pop(context);
+
+      // Mostrar éxito
+      if (!context.mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('✅ Migración Exitosa'),
+          content: const Text(
+            'Se ha agregado el campo "category" a todos los lugares.\n\n'
+            'Ahora puedes editar las categorías manualmente en Firebase Console.\n\n'
+            'Categorías disponibles:\n'
+            '• Gastronomía\n'
+            '• Cultura\n'
+            '• Naturaleza\n'
+            '• Hoteles\n'
+            '• Aventura\n'
+            '• Compras',
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Entendido'),
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      // Cerrar loading
+      if (!context.mounted) return;
+      Navigator.pop(context);
+
+      // Mostrar error
+      if (!context.mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('❌ Error'),
+          content: Text('Error durante la migración:\n\n$e'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cerrar'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: ThemeColors.textPrimary,
+      ),
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const CircularProgressIndicator(
+            color: ThemeColors.primaryGreen,
+            strokeWidth: 3,
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          const Text(
+            'Cargando lugares...',
+            style: TextStyle(
+              fontSize: 14,
+              color: ThemeColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(AppSpacing.xl),
+            decoration: BoxDecoration(
+              color: ThemeColors.error.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.error_outline,
+              size: AppSpacing.iconXLarge,
+              color: ThemeColors.error,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          const Text(
+            'Error al cargar lugares',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: ThemeColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          const Text(
+            'Por favor, intenta nuevamente',
+            style: TextStyle(
+              fontSize: 14,
+              color: ThemeColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.xl),
+              decoration: BoxDecoration(
+                color: ThemeColors.primaryGreen.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.explore_outlined,
+                size: 64,
+                color: ThemeColors.primaryGreen,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            const Text(
+              'No hay lugares recientes',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: ThemeColors.textPrimary,
               ),
+              textAlign: TextAlign.center,
             ),
-
-            // List
-            Expanded(
-              child: FutureBuilder<List<PlaceMin>>(
-                future: _loadPlaces(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (snapshot.hasError) {
-                    return const Center(child: Text('Error al cargar lugares'));
-                  }
-
-                  final places = snapshot.data ?? [];
-
-                  if (places.isEmpty) {
-                    return const Center(child: Text('No hay lugares recientes. Prueba escaneando QRs.'));
-                  }
-
-                  return ListView.separated(
-                    itemCount: places.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final place = places[index];
-
-                      return TouristPlaceTile(
-                        place: place,
-                        onTap: () async {
-                          final p = await repo.fetchPlace(place.id);
-
-                          if (p == null) return;
-
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (_) => TouristPlacePanel(place: p),
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
+            const SizedBox(height: AppSpacing.sm),
+            const Text(
+              'Escanea códigos QR para descubrir lugares increíbles cerca de ti',
+              style: TextStyle(
+                fontSize: 14,
+                color: ThemeColors.textSecondary,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            ElevatedButton.icon(
+              onPressed: () => AppNavigation.of(context).goToAR(),
+              icon: const Icon(Icons.qr_code_scanner, size: 20),
+              label: const Text('Abrir Escáner'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ThemeColors.primaryGreen,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.xl,
+                  vertical: AppSpacing.md,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
+                ),
+                elevation: 0,
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPlacesList(BuildContext context, List<PlaceMin> places) {
+    return ListView.separated(
+      physics: const BouncingScrollPhysics(),
+      itemCount: places.length,
+      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.listItemSpacing),
+      itemBuilder: (context, index) {
+        final place = places[index];
+
+        return TouristPlaceTile(
+          place: place,
+          onTap: () async {
+            final p = await repo.fetchPlace(place.id);
+
+            if (p == null) return;
+
+            if (!context.mounted) return;
+
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (_) => TouristPlacePanel(place: p),
+            );
+          },
+        );
+      },
     );
   }
 }

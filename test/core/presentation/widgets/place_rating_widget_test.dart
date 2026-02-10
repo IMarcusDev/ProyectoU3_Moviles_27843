@@ -9,7 +9,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {},
+              onSubmit: (stars, comment) {},
             ),
           ),
         ),
@@ -25,7 +25,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {},
+              onSubmit: (stars, comment) {},
             ),
           ),
         ),
@@ -40,7 +40,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {},
+              onSubmit: (stars, comment) {},
             ),
           ),
         ),
@@ -61,7 +61,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {},
+              onSubmit: (stars, comment) {},
             ),
           ),
         ),
@@ -81,7 +81,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {},
+              onSubmit: (stars, comment) {},
             ),
           ),
         ),
@@ -108,7 +108,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {},
+              onSubmit: (stars, comment) {},
             ),
           ),
         ),
@@ -125,7 +125,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {},
+              onSubmit: (stars, comment) {},
             ),
           ),
         ),
@@ -149,8 +149,8 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {
-                submittedRating = rating;
+              onSubmit: (stars, comment) {
+                submittedRating = stars;
               },
             ),
           ),
@@ -176,8 +176,8 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {
-                submittedRating = rating;
+              onSubmit: (stars, comment) {
+                submittedRating = stars;
               },
             ),
           ),
@@ -206,7 +206,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {},
+              onSubmit: (stars, comment) {},
             ),
           ),
         ),
@@ -225,7 +225,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {},
+              onSubmit: (stars, comment) {},
             ),
           ),
         ),
@@ -245,7 +245,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {},
+              onSubmit: (stars, comment) {},
             ),
           ),
         ),
@@ -263,8 +263,8 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: PlaceRatingWidget(
-              onSubmit: (rating) {
-                submittedRating = rating;
+              onSubmit: (stars, comment) {
+                submittedRating = stars;
               },
             ),
           ),
