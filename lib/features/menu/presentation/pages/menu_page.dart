@@ -14,7 +14,6 @@ import 'package:turismo_app/core/domain/repositories/place_min_repository.dart';
 import 'package:turismo_app/features/menu/presentation/widgets/quick_action_button.dart';
 import 'package:turismo_app/core/presentation/widgets/tourist_place_tile.dart';
 import 'package:turismo_app/core/navigation/app_navigation.dart';
-import 'package:turismo_app/core/utils/scripts/add_category_to_places.dart';
 
 class MenuPage extends ConsumerWidget {
   final PlaceRepository repo = PlaceRepositoryImpl(datasource: FirebasePlaceDatasource());
@@ -146,113 +145,6 @@ class MenuPage extends ConsumerWidget {
         const SizedBox(height: AppSpacing.md),
       ],
     );
-  }
-
-  Future<void> _runMigration(BuildContext context) async {
-    // Mostrar confirmación
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('⚠️ Migración de Base de Datos'),
-        content: const Text(
-          'Esto agregará el campo "category" con valor "Sin categoría" '
-          'a todos los lugares que no lo tengan.\n\n'
-          '¿Deseas continuar?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-            ),
-            child: const Text('Ejecutar Migración'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirm != true) return;
-
-    // Mostrar loading
-    if (!context.mounted) return;
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(
-        child: Card(
-          child: Padding(
-            padding: EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 16),
-                Text('Ejecutando migración...'),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    try {
-      final migration = AddCategoryToPlacesMigration();
-      await migration.migrate(defaultCategory: 'Sin categoría');
-
-      // Cerrar loading
-      if (!context.mounted) return;
-      Navigator.pop(context);
-
-      // Mostrar éxito
-      if (!context.mounted) return;
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('✅ Migración Exitosa'),
-          content: const Text(
-            'Se ha agregado el campo "category" a todos los lugares.\n\n'
-            'Ahora puedes editar las categorías manualmente en Firebase Console.\n\n'
-            'Categorías disponibles:\n'
-            '• Gastronomía\n'
-            '• Cultura\n'
-            '• Naturaleza\n'
-            '• Hoteles\n'
-            '• Aventura\n'
-            '• Compras',
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Entendido'),
-            ),
-          ],
-        ),
-      );
-    } catch (e) {
-      // Cerrar loading
-      if (!context.mounted) return;
-      Navigator.pop(context);
-
-      // Mostrar error
-      if (!context.mounted) return;
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('❌ Error'),
-          content: Text('Error durante la migración:\n\n$e'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cerrar'),
-            ),
-          ],
-        ),
-      );
-    }
   }
 
   Widget _buildSectionHeader(String title) {

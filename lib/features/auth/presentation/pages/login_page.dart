@@ -14,6 +14,22 @@ class LoginPage extends ConsumerWidget {
   String email = '';
   String password = '';
 
+  Widget _buildLogo() {
+    return Image.asset(
+      'assets/logo/app_logo.png',
+      width: 80,
+      height: 80,
+      fit: BoxFit.contain,
+      errorBuilder: (context, error, stackTrace) {
+        return const Icon(
+          Icons.explore_rounded,
+          size: 64,
+          color: ThemeColors.primaryGreen,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -31,21 +47,30 @@ class LoginPage extends ConsumerWidget {
                 // Espaciado superior
                 const SizedBox(height: 40),
 
-                // Logo
-                const CircleAvatar(
-                  radius: 48,
-                  backgroundColor: Color(0xFFE8F5E9),
-                  child: Icon(
-                    Icons.travel_explore,
-                    size: 40,
-                    color: ThemeColors.primaryGreen,
+                // Logo de la aplicación
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: ThemeColors.primaryGreen.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: ThemeColors.primaryGreen.withValues(alpha: 0.15),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: _buildLogo(),
                   ),
                 ),
                 const SizedBox(height: 12),
                 const Text(
-                  'App Turismo',
+                  'EcuaMap',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 36,
                     fontWeight: FontWeight.w600,
                     color: ThemeColors.textPrimary,
                   ),

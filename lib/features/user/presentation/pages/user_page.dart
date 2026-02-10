@@ -27,13 +27,18 @@ class UserPage extends ConsumerWidget {
             onPressed: () {
               showAboutDialog(
                 context: context,
-                applicationName: 'Turismo App',
+                applicationName: 'EcuaMap',
                 applicationVersion: '1.0.0',
                 applicationIcon: const Icon(Icons.travel_explore),
                 children: const [
                   Text(
-                    'Aplicación de turismo para explorar destinos, mapas y experiencias locales.',
+                    'Aplicación de turismo para explorar destinos, mapas y experiencias locales. ',
                   ),
+                  SizedBox(height: 16,),
+                  Text('Desarrolladores:'),
+                  Text('Mateo Sosa'),
+                  Text('Marcos Escobar'),
+                  Text('Fernando Sandoval')
                 ],
               );
             },

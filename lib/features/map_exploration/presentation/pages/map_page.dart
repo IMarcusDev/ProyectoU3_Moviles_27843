@@ -11,7 +11,6 @@ import '../widgets/category_chip.dart';
 import '../widgets/map_filters_sheet.dart';
 import '../widgets/route_sheet.dart';
 import 'package:turismo_app/core/utils/theme/theme_colors.dart';
-import 'package:turismo_app/core/utils/theme/app_spacing.dart';
 
 class MapPage extends ConsumerStatefulWidget {
   const MapPage({super.key});

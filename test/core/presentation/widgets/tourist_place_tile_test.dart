@@ -39,7 +39,13 @@ void main() {
       );
 
       expect(find.byIcon(Icons.place_outlined), findsOneWidget);
-      expect(find.byType(CircleAvatar), findsOneWidget);
+      // El widget ahora usa un Container con BoxShape.circle, no CircleAvatar
+      final containers = tester.widgetList<Container>(find.byType(Container));
+      final circleContainers = containers.where((container) {
+        final decoration = container.decoration as BoxDecoration?;
+        return decoration?.shape == BoxShape.circle;
+      });
+      expect(circleContainers.length, greaterThan(0));
     });
 
     testWidgets('should display chevron right icon', (WidgetTester tester) async {
@@ -57,7 +63,7 @@ void main() {
         ),
       );
 
-      expect(find.byIcon(Icons.chevron_right), findsOneWidget);
+      expect(find.byIcon(Icons.chevron_right_rounded), findsOneWidget);
     });
 
     testWidgets('should show "Visto recientemente" for places scanned less than 1 minute ago', (WidgetTester tester) async {
@@ -280,8 +286,13 @@ void main() {
       // Check for Row layout
       expect(find.byType(Row), findsOneWidget);
 
-      // Check for CircleAvatar
-      expect(find.byType(CircleAvatar), findsOneWidget);
+      // Check for circular Container (ya no usa CircleAvatar)
+      final containers = tester.widgetList<Container>(find.byType(Container));
+      final circleContainers = containers.where((container) {
+        final decoration = container.decoration as BoxDecoration?;
+        return decoration?.shape == BoxShape.circle;
+      });
+      expect(circleContainers.length, greaterThan(0));
     });
 
     testWidgets('should use Column for text layout', (WidgetTester tester) async {
